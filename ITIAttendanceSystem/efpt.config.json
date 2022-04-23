@@ -1,0 +1,79 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "ITICOMPSYSDB2Context",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": "Data",
+   "OutputPath": "Models",
+   "ProjectRootNamespace": "ITIAttendanceSystem",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Attendances]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[buildingAffairsAttendances]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BuildingAffairsStaffs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Comments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Departments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Documents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Instructors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Schedules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[studentPermissions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Students]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Subjects]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "DESKTOP-GU2I92M.ITICOMPSYSDB2",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false
+}
