@@ -4,6 +4,7 @@ using ITIAttendanceSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITIAttendanceSystem.Migrations
 {
     [DbContext(typeof(ITICOMPSYSDB2Context))]
-    partial class ITICOMPSYSDB2ContextModelSnapshot : ModelSnapshot
+    [Migration("20220427023323_student_name")]
+    partial class student_name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

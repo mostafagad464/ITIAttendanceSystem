@@ -1,12 +1,70 @@
-﻿@model IEnumerable<ITIAttendanceSystem.Models.Attendance>
+﻿@*@model IEnumerable<ITIAttendanceSystem.Models.Attendance>*@
 
+@model int
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="text-center">Students Attendnce</h1>
+<input id="Selected" value="@Model" hidden />
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+        <th>Department</th>
+        <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <select id="DeptId" name="DeptId" asp-items="ViewBag.Departments" class="w-100">
+                    <option>Select </option>
+                </select>
+            </td>
+            <td>
+                <select id="Status" name="Status" class="w-100">
+                    <option>Arriving</option>
+                    <option>Leaving</option>
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div id="Students">
+    
+</div>
+@section Scripts{
+    <script>
+        //var sel = $("#Selected").val();
+        //if(sel !=0){
+        //    $("#DeptId").val(sel);
+        //    getStudents();
+        //}
+        function getStudents(){
+            var DepartmentID = $("#DeptId").val();
+            var Status = $("#Status").val();
+            $("#Students").load("/Attendances/DepartmentStudents?DepartmentID="+DepartmentID+"&Status="+Status)
+        }
+        function updateStudents(Std_Id){
+            var DepartmentID = $("#DeptId").val();
+            var Status = $("#Status").val();
+            $("#Students").load("/Attendances/Attend/"+Std_Id+"?stat="+Status+"&deptId="+DepartmentID)
+        }
+        $("#DeptId").change(function(){
+            getStudents();
+        })
+        $("#Status").change(function(){
+            getStudents();
+        })
+        $("#StudentBtn").click(function(){
+            console.log("inside");
+            var StdId = $("#StudentBtn").val();
+            updateStudents(StdId);
+        })
+        </script>
+}
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -44,4 +102,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@
