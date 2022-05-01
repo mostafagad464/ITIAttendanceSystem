@@ -1,0 +1,107 @@
+﻿@*@model IEnumerable<ITIAttendanceSystem.Models.Schedule>*@
+@*@model ITIAttendanceSystem.Models.Schedule*@
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model IEnumerable<Schedule>
+
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Sunday </th>
+            <th scope="col">Monday </th>
+            <th scope="col">Tuesday</th>
+            <th scope="col">Wednesday</th>
+            <th scope="col">Thursday</th>
+            <th scope="col">Friday</th>
+            <th scope="col">Saturday</th>
+        </tr>
+    </thead>
+
+    <tbody>
+                
+    @{
+        List<Schedule> schedules = new List<Schedule>();     
+        foreach(var item in Model)
+        {
+            schedules.Add(item);
+        }
+        DateTime dateF = ViewBag.DateFrom;
+        DateTime dateT = ViewBag.DateTo;
+
+        int s = 0, c = 0, flag=0;
+        int dayWeekFlag = ViewBag.numDayOfWeek, remainDaysFlag = ViewBag.totalDays;
+
+        for(int i=0; i<ViewBag.constDaySchedule;i++)
+            {
+                if ( dayWeekFlag == 8)
+                    dayWeekFlag = 1;
+                flag = 0;
+                <tr>
+                    @for(int j=1;  dayWeekFlag<8; j++)
+                    {
+                        c = DateTime.Compare(dateF, dateT);
+                        if (j < dayWeekFlag)
+                        {
+                            <td>
+                            </td>
+                            continue;
+                        }
+                        if ( c > 0)
+                        {
+                            <td>
+                            </td>
+                            dateF = dateF.AddDays(1);
+                            dayWeekFlag += 1;
+                            continue;
+                        }
+                            
+                        //DateOnly domyDate =  schedules[s].ScheduleDate.date;
+                        Schedule schedule = schedules.FirstOrDefault(a=>a.ScheduleDate.Date==dateF.Date);
+
+                        @if(schedule != null)
+                        {
+                            <td >
+                                <div>@dateF.ToShortDateString()</div>    
+                                <select id="@dateF"  asp-for="@schedule.LectPeriod" onchange="SetScheduleValues(value,this.id)">
+                                    <option value="0">No</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </td>
+                        }
+                        else
+                        {
+                            <td >
+                                <div>@dateF.ToShortDateString()</div>    
+                                <select id="@dateF" onchange="SetScheduleValues(value,this.id)">
+                                    <option value="0">No</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </td>
+                        }
+
+                        s += 1;                    
+                        dayWeekFlag += 1;
+                        flag += 1;
+                        dateF = dateF.AddDays(1);
+                    }
+                    @{ remainDaysFlag = remainDaysFlag - flag; }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="container-fluid text-center" >
+    @*//asp-action="update"*@
+    <a id="UpdateSch" class="btn btn-primary" onclick="UpdateSchedule()" >Update</a>
+</div>
+
+

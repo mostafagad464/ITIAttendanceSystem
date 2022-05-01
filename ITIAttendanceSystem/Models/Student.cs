@@ -33,6 +33,8 @@ namespace ITIAttendanceSystem.Models
         public string HomePhone { get; set; }
         public string MilitaryStatusName { get; set; }
         public string Code { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
 
         [ForeignKey(nameof(DepartmentId))]
         [InverseProperty("Students")]
