@@ -20,6 +20,7 @@ namespace ITIAttendanceSystem.Models
 
         [Key]
         public int StudentId { get; set; }
+        public string StudentName { get; set; }
         public int StudentStatus { get; set; }
         public string Id { get; set; }
         public int? DepartmentId { get; set; }

@@ -21,12 +21,22 @@ namespace ITIAttendanceSystem.Views
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string selectdept)
         {
-            var iTICOMPSYSDB2Context = _context.Students.Include(s => s.Department);
-            return View(await iTICOMPSYSDB2Context.ToListAsync());
-        }
 
+            var vm = new selectDepartmentViewModel();
+            var depts= _context.Departments.Select(a => a.ShortName).ToList();
+            vm.DepartmentSelectList=new SelectList(depts.Distinct().ToList());
+            vm.students= _context.Students.Include(s => s.Department).ToList();
+            vm.selectdept = selectdept;
+            if (selectdept != null)
+            {
+                vm.students = vm.students.Where(a => a.Department != null && a.Department.ShortName == selectdept).ToList();
+
+            }
+            return View(vm);
+
+        }
         // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)
         {
