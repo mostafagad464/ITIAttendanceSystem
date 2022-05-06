@@ -21,22 +21,25 @@ namespace ITIAttendanceSystem.Views
         }
 
         // GET: Attendances
-        public IActionResult Index(int? deptid)
+        public IActionResult Index()
         {
-            //var iTICOMPSYSDB2Context = _context.Attendances.Include(a => a.Student);
-            //return View(await iTICOMPSYSDB2Context.ToListAsync());
-            deptid = (deptid == null) ? 0 : deptid;
             ViewBag.Departments = new SelectList(_context.Departments, "Id", "ShortName");
-            return View(deptid);
+            return View();
         }
-        public IActionResult DepartmentStudents(int DepartmentID, string Status)
+        // GET: Attendances/IndexOnline
+        public IActionResult IndexOnline()
+        {
+            ViewBag.Departments = new SelectList(_context.Departments, "Id", "ShortName");
+            return View();
+        }
+        public IActionResult DepartmentStudents(int DepartmentID, string Status, DateTime? AttDate)
         {
             List<Student> studentsList = new List<Student>();
 
             Department dept = _context.Departments.Include(s => s.Students).FirstOrDefault(x => x.Id == DepartmentID);
             List<Student> StudentsInDept = dept.Students.ToList();
 
-            DateTime today = DateTime.Today;
+            DateTime today = (AttDate == null) ? DateTime.Today : (DateTime)AttDate;
             List<Attendance> Attended = _context.Attendances.Include(s => s.Student).Where(a => a.AttendanceDate == today && a.Student.DepartmentId == DepartmentID &&a.LeaveTime == null).ToList();
             List<Student> StudentsAttended = new List<Student>();
 
@@ -58,30 +61,31 @@ namespace ITIAttendanceSystem.Views
             }
             return PartialView(studentsList);
         }
-        //[HttpPost]
-        public async Task<IActionResult> Attend(int id, string stat, int deptId)
+        public async Task<IActionResult> Attend(int id, string stat, int deptId, DateTime? AttDate, TimeSpan? AttTime)
         {
             Attendance StdAttend;
-            
+
+            AttDate = (AttDate == null) ? DateTime.Today : AttDate;
+            AttTime = (AttTime == null) ? DateTime.Now.TimeOfDay : AttTime;
+
             if (stat == "Arriving")
             {
                 StdAttend = new Attendance();
                 StdAttend.StudentId = id;
-                StdAttend.AttendanceDate = DateTime.Today;
-                StdAttend.ArrivalTime = DateTime.Now.TimeOfDay;
+                StdAttend.AttendanceDate = (DateTime)AttDate;
+                StdAttend.ArrivalTime = AttTime;
                 _context.Add(StdAttend);
                 
             }
             else if (stat == "Leaving")
             {
-                StdAttend = (Attendance)_context.Attendances.Where(a=>a.StudentId == id && a.AttendanceDate == DateTime.Today).FirstOrDefault();
-                
-                StdAttend.LeaveTime = DateTime.Now.TimeOfDay;
+                StdAttend = _context.Attendances.Where(a=>a.StudentId == id && a.AttendanceDate == (DateTime)AttDate).FirstOrDefault();
+
+                StdAttend.LeaveTime = AttTime;
                 _context.Update(StdAttend);
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(DepartmentStudents), new { DepartmentID = deptId, Status = stat });
-            //return RedirectToAction(nameof(Index), new { deptid = deptId });
         }
 
         // GET: Attendances/Details/5

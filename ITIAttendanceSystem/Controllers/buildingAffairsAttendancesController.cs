@@ -23,8 +23,58 @@ namespace ITIAttendanceSystem.Views
         // GET: buildingAffairsAttendances
         public async Task<IActionResult> Index()
         {
-            var iTICOMPSYSDB2Context = _context.buildingAffairsAttendances.Include(b => b.Staff);
-            return View(await iTICOMPSYSDB2Context.ToListAsync());
+            return View();
+        }
+        public async Task<IActionResult> Staff(string Status)
+        {
+            List<BuildingAffairsStaff> StaffsList = new List<BuildingAffairsStaff>();
+
+            List<BuildingAffairsStaff> AllStaff = _context.BuildingAffairsStaffs.ToList();
+
+            DateTime today = DateTime.Today;
+            List<buildingAffairsAttendance> Attended = _context.buildingAffairsAttendances.Include(s => s.Staff).Where(a => a.AttendanceDate == today && a.LeaveTime == null).ToList();
+            List<BuildingAffairsStaff> StaffsAttended = new List<BuildingAffairsStaff>();
+
+            foreach (buildingAffairsAttendance attendance in Attended)
+            {
+                StaffsAttended.Add(attendance.Staff);
+            }
+
+            List<BuildingAffairsStaff> StaffsNotAttend = AllStaff.Except(StaffsAttended).ToList();
+
+            ViewBag.Status = Status;
+            if (Status == "Arriving")
+            {
+                StaffsList = StaffsNotAttend;
+            }
+            else if (Status == "Leaving")
+            {
+                StaffsList = StaffsAttended;
+            }
+            return PartialView(StaffsList);
+        }
+        public async Task<IActionResult> Attend(int id, string stat)
+        {
+            buildingAffairsAttendance StfAttend;
+
+            if (stat == "Arriving")
+            {
+                StfAttend = new buildingAffairsAttendance();
+                StfAttend.StaffId = id;
+                StfAttend.AttendanceDate = DateTime.Today;
+                StfAttend.ArrivalTime = DateTime.Now.TimeOfDay;
+                _context.Add(StfAttend);
+
+            }
+            else if (stat == "Leaving")
+            {
+                StfAttend = _context.buildingAffairsAttendances.Where(a => a.StaffId == id && a.AttendanceDate == DateTime.Today).FirstOrDefault();
+
+                StfAttend.LeaveTime = DateTime.Now.TimeOfDay;
+                _context.Update(StfAttend);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Staff), new { Status = stat });
         }
 
         // GET: buildingAffairsAttendances/Details/5

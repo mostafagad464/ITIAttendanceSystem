@@ -24,6 +24,8 @@ namespace ITIAttendanceSystem.Models
         public int StudentStatus { get; set; }
         public string Id { get; set; }
         public int? DepartmentId { get; set; }
+        [Range(1,3)]
+        public int? SecNo { get; set; }
         public string Address { get; set; }
         public string Faculty { get; set; }
         public string University { get; set; }

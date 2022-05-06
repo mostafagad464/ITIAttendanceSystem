@@ -1,13 +1,10 @@
-﻿@*@model IEnumerable<ITIAttendanceSystem.Models.Attendance>*@
-
-@model int
+﻿
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1 class="text-center">Students Attendnce</h1>
-<input id="Selected" value="@Model" hidden />
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover text-center">
     <thead>
         <tr>
         <th>Department</th>
@@ -35,11 +32,6 @@
 </div>
 @section Scripts{
     <script>
-        //var sel = $("#Selected").val();
-        //if(sel !=0){
-        //    $("#DeptId").val(sel);
-        //    getStudents();
-        //}
         function getStudents(){
             var DepartmentID = $("#DeptId").val();
             var Status = $("#Status").val();
@@ -56,50 +48,6 @@
         $("#Status").change(function(){
             getStudents();
         })
-        $("#StudentBtn").click(function(){
-            console.log("inside");
-            var StdId = $("#StudentBtn").val();
-            updateStudents(StdId);
-        })
         </script>
 }
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LeaveTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArrivalTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LeaveTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.StudentId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>*@

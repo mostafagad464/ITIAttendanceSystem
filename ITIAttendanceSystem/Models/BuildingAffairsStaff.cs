@@ -31,6 +31,8 @@ namespace ITIAttendanceSystem.Models
         public string HomePhone { get; set; }
         public string MilitaryStatusName { get; set; }
         public int BuildingAffairsType { get; set; }
+        [RegularExpression("Security|Cleaning|Maintenance")]
+        public string DeptName { get; set; }    
 
         [InverseProperty(nameof(buildingAffairsAttendance.Staff))]
         public virtual ICollection<buildingAffairsAttendance> buildingAffairsAttendances { get; set; }
