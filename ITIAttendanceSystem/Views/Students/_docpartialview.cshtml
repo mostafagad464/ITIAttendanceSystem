@@ -1,0 +1,64 @@
+﻿@model selectDepartmentViewModel
+<div class="modal fade"  id="MyPopUp" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">dialog</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+ <form asp-action="Docs">
+
+<table class="table">
+  <tbody>
+
+    <tr class="table-info">
+      <td>ID Photo</td>
+      <td>Birth Date</td>
+      <td>Graduation</td>
+    </tr>
+      <tr>
+      <td><input id="imgid"  type="checkbox"></td>
+      <td><input id="BD" type="checkbox"></td>
+      <td><input id="grad"  type="checkbox"></td>
+
+    </tr>
+    <tr class="table-info">
+      <td>Contract</td>
+      <td>Police Paper</td>
+      <td>Military</td>
+    </tr>
+    <tr>
+      <td><input id="contract" type="checkbox"></td>
+      <td><input id="policepap" type="checkbox"></td>
+      <td><select id="military" >
+          <option value="True">True</option>
+          <option value="False">False</option>
+          
+      </select>
+      </td>
+    </tr>
+    <tr >
+      <td class="table-info" >Notes</td>
+      <td><textarea id="note" class="form-control" id="textAreaExample4" rows="3"></textarea></td>
+
+    </tr>
+  </tbody>
+</table>
+</form>
+      </div>
+      <div class="modal-footer">
+          <input type="submit" onclick="savedata()" value="Save" class="btn btn-primary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+ 
+        
+      </div>
+       
+    </div>
+    
+  </div>
+</div>
+
+
+
+

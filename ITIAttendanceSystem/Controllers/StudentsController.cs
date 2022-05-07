@@ -23,7 +23,7 @@ namespace ITIAttendanceSystem.Views
         // GET: Students
         public IActionResult Index(string selectdept)
         {
-
+            
             var vm = new selectDepartmentViewModel();
             var depts= _context.Departments.Select(a => a.ShortName).ToList();
             vm.DepartmentSelectList=new SelectList(depts.Distinct().ToList());
@@ -163,9 +163,35 @@ namespace ITIAttendanceSystem.Views
             return RedirectToAction(nameof(Index));
         }
 
+
         private bool StudentExists(int id)
         {
             return _context.Students.Any(e => e.StudentId == id);
         }
+
+        //Docs 
+        [HttpGet]
+        public async Task <IActionResult> Docs (Document doc,string selectedDept)
+        {
+            var document=_context.Documents.FirstOrDefault(a => a.StudentId == doc.StudentId);
+            if(document==null)
+            {
+                _context.Documents.Add(doc);
+            }
+            else
+            {
+                _context.Documents.Remove(document);
+                _context.Documents.Add(doc);
+
+            }
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index), new { selectdept = selectedDept });
+            
+            //selectDepartmentViewModel model = new selectDepartmentViewModel();
+            //model.students = _context.Students.Include(a => a.Document).Where(a => a.StudentId == id).ToList();
+            //return PartialView(model);
+        }
     }
 }
+
+
