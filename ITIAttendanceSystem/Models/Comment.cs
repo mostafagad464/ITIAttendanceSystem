@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index(nameof(StudentId), Name = "IX_Comments_StudentId")]
-    [Index(nameof(UserId), Name = "IX_Comments_UserId")]
+    [Index("StudentId", Name = "IX_Comments_StudentId")]
+    [Index("UserId", Name = "IX_Comments_UserId")]
     public partial class Comment
     {
         [Key]
@@ -20,7 +20,7 @@ namespace ITIAttendanceSystem.Models
         public int StudentId { get; set; }
         public string UserId { get; set; }
 
-        [ForeignKey(nameof(StudentId))]
+        [ForeignKey("StudentId")]
         [InverseProperty("Comments")]
         public virtual Student Student { get; set; }
     }

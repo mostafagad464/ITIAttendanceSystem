@@ -58,7 +58,7 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "DESKTOP-GU2I92M.ITICOMPSYSDB2",
+   "UiHint": "DESKTOP-GU2I92M.ITIAttendanceSystem",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,

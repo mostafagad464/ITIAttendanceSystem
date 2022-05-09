@@ -18,12 +18,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Note)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.PermissionState)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PermissionType)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Instructor)
             </th>
@@ -42,17 +42,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Note)
             </td>
-            <td>
+           @* <td>
                 @Html.DisplayFor(modelItem => item.PermissionState)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PermissionType)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Instructor.InstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Instructor.InstructorId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.StudentId)
+                @Html.DisplayFor(modelItem => item.Student.StudentName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
