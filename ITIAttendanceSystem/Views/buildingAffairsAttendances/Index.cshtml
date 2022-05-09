@@ -1,41 +1,44 @@
-﻿@model IEnumerable<ITIAttendanceSystem.Models.buildingAffairsAttendance>
-
+﻿
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h1 class="text-center">Staff Attendnce</h1>
+<table class="table table-bordered table-hover text-center">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.LeaveTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Staff)
-            </th>
-            <th></th>
+        <th>Status</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.LeaveTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Staff.FullNameAr)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <select id="Status" name="Status" class="w-100">
+                    <option>Arriving</option>
+                    <option>Leaving</option>
+                </select>
             </td>
         </tr>
-}
     </tbody>
 </table>
+<div id="Staff">
+    
+</div>
+
+@section Scripts{
+    <script>
+        getStaff();
+        function getStaff(){
+            var Status = $("#Status").val();
+            $("#Staff").load("/buildingAffairsAttendances/Staff?Status="+Status)
+        }
+        function updateStaff(Stf_Id){
+            var Status = $("#Status").val();
+            $("#Staff").load("/buildingAffairsAttendances/Attend/"+Stf_Id+"?stat="+Status)
+        }
+        $("#Status").change(function(){
+            getStaff();
+        })
+        </script>
+}
+

@@ -4,6 +4,7 @@ using ITIAttendanceSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ITIAttendanceSystem.Migrations
 {
     [DbContext(typeof(ITICOMPSYSDB2Context))]
-    partial class ITICOMPSYSDB2ContextModelSnapshot : ModelSnapshot
+    [Migration("20220505221558_student_section")]
+    partial class student_section
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,9 +84,6 @@ namespace ITIAttendanceSystem.Migrations
 
                     b.Property<int>("BuildingAffairsType")
                         .HasColumnType("int");
-
-                    b.Property<string>("DeptName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullNameAr")
                         .IsRequired()
