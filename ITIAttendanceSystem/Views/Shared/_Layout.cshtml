@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ITIAttendanceSystem.styles.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -32,6 +33,12 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Attendances" asp-action="IndexOnline">Students Online Attendance</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Attendances" asp-action="BarCode">Attendance BarCode</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Attendances" asp-action="BarCode" asp-route-stat="L">CheckoutBarCode</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="buildingAffairsAttendances" asp-action="Index">Staff Attendance</a>
                         </li>
                     </ul>
@@ -53,6 +60,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/html5-qrcode.min.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
