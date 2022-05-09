@@ -23,7 +23,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Note)
         </dd>
-        <dt class = "col-sm-2">
+       @* <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PermissionState)
         </dt>
         <dd class = "col-sm-10">
@@ -34,18 +34,18 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PermissionType)
-        </dd>
+        </dd>*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Instructor)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Instructor.InstructorId)
+            @Html.DisplayFor(model => model.Instructor.InstName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Student)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Student.StudentId)
+            @Html.DisplayFor(model => model.Student.StudentName)
         </dd>
     </dl>
     

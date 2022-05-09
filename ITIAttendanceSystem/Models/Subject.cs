@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index(nameof(DepartmentId), Name = "IX_Subjects_DepartmentId")]
+    [Index("DepartmentId", Name = "IX_Subjects_DepartmentId")]
     public partial class Subject
     {
         [Key]
@@ -19,7 +19,7 @@ namespace ITIAttendanceSystem.Models
         public int LabHours { get; set; }
         public int DepartmentId { get; set; }
 
-        [ForeignKey(nameof(DepartmentId))]
+        [ForeignKey("DepartmentId")]
         [InverseProperty("Subjects")]
         public virtual Department Department { get; set; }
     }

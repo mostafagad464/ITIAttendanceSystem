@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index(nameof(AttendanceDate), nameof(StudentId), Name = "AK_Attendances_AttendanceDate_StudentId", IsUnique = true)]
+    [Index("AttendanceDate", "StudentId", Name = "AK_Attendances_AttendanceDate_StudentId", IsUnique = true)]
     public partial class Attendance
     {
         [Key]
@@ -18,7 +18,7 @@ namespace ITIAttendanceSystem.Models
         public TimeSpan? ArrivalTime { get; set; }
         public TimeSpan? LeaveTime { get; set; }
 
-        [ForeignKey(nameof(StudentId))]
+        [ForeignKey("StudentId")]
         [InverseProperty("Attendances")]
         public virtual Student Student { get; set; }
     }
