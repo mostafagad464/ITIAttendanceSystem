@@ -21,19 +21,17 @@ namespace ITIAttendanceSystem.Views
         }
 
         // GET: Students
-        public IActionResult Index(string selectdept)
+
+        public IActionResult Index()
         {
             
             var vm = new selectDepartmentViewModel();
-            var depts= _context.Departments.Select(a => a.ShortName).ToList();
-            vm.DepartmentSelectList=new SelectList(depts.Distinct().ToList());
-            vm.students= _context.Students.Include(s => s.Department).ToList();
-            vm.selectdept = selectdept;
-            if (selectdept != null)
-            {
-                vm.students = vm.students.Where(a => a.Department != null && a.Department.ShortName == selectdept).ToList();
+            var depts = _context.Departments.Select(a => a.ShortName).ToList();
 
-            }
+            vm.DepartmentSelectList = new SelectList(depts.Distinct().ToList());
+            vm.students = _context.Students.Include(s => s.Department).Include(s => s.Document).ToList();
+            
+            
             return View(vm);
 
         }
@@ -185,11 +183,28 @@ namespace ITIAttendanceSystem.Views
 
             }
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index), new { selectdept = selectedDept });
+            return RedirectToAction(nameof(DeptStudents), new { DName = selectedDept });
             
             //selectDepartmentViewModel model = new selectDepartmentViewModel();
             //model.students = _context.Students.Include(a => a.Document).Where(a => a.StudentId == id).ToList();
             //return PartialView(model);
+        }
+        public IActionResult SendDataToDoc(int Stdid,string selectedDept)
+        {
+            return RedirectToAction(nameof(Index), new { selectdept = selectedDept , StudentId = Stdid });
+        }
+        public IActionResult DeptStudents(string DName, int? stdid,string stdname)
+        {
+            var vm = new selectDepartmentViewModel();
+            List<Student> students = _context.Students.Include(s => s.Department).Include(s => s.Document).ToList();
+            if (DName == "All Departments") { vm.students = students; }
+            else
+            { vm.students = students.Where(a => a.Department != null && a.Department.ShortName == DName).ToList();}
+            if (stdid != null)
+                vm.StdId = (int)stdid;
+            if (stdname != null)
+                vm.StdName = stdname;
+            return PartialView(vm);
         }
     }
 }

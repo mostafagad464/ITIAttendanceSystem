@@ -1,0 +1,56 @@
+﻿@model selectDepartmentViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Name in English
+            </th>
+            <th>
+                Department
+            </th>
+            <th>
+                Student Status
+            </th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.students)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Department.ShortName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentStatus)
+                </td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-success">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.StudentId" class="btn btn-danger">Delete</a>
+                    <a class="btn btn-secondary AddPopUp" id="btndocs" onclick="sendid(@item.StudentId,@item.StudentName)">Documents</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    Html.RenderPartial("_docpartialview");
+}

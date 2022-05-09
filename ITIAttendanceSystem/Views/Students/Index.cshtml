@@ -1,107 +1,71 @@
 ﻿@*@model IEnumerable<ITIAttendanceSystem.Models.Student>*@
-    @model selectDepartmentViewModel
+@model selectDepartmentViewModel
 
 @{
     ViewData["Title"] = "Index";
+    ViewData["stdid"] = 0;
 }
 
-<h1>Index</h1>
+<h1>Student List</h1>
 <form class="bg-light">
     <label>Select Department</label>
-    @Html.DropDownListFor(a=>a.selectdept,Model.DepartmentSelectList,new {@class="col col-3" ,@id="dept"} )
+    <select id="dept" name="DeptId" asp-items="Model.DepartmentSelectList" class="col col-3">
+        <option>All Departments</option>
+    </select>
 
-    <input type="submit" value="Filter"/>
+    @*<input type="submit" value="Filter" />*@
 
     <a asp-action="Create" class="btn btn-primary offset-6">Add Student </a>
 </form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                ID
-            </th>
-            <th>
-                Name in English
-            </th>
-            <th>
-                Department
-            </th>
-            <th>
-                Student Status
-            </th>
-            <th>Operations</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.students) {
-        <tr>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.ShortName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentStatus)
-            </td>
-           
-
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-success">Edit</a> 
-                <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-info">Details</a> 
-                <a asp-action="Delete" asp-route-id="@item.StudentId" class="btn btn-danger">Delete</a>
-                <a class="btn btn-secondary AddPopUp" id="btndocs">Documents</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-check <input type="checkbox" id="ch1"></input>
-@*<div id="docs"> </div>*@
 
 
-@{
-    Html.RenderPartial("_docpartialview");
-}
+
+<div id="StudentsTable">
+</div>
+
+
+
+
 
 
 @section Scripts{
     <script type="text/javascript">
-        var stdid;
-        function showdocs(id){
-            //$('#docs').load("/Students/_docpartialview?id="+id);
-            
+        var dept = document.getElementById("dept").value;
+        dept=dept.replace(/ /g,"%20");
+        $("#StudentsTable").load("/Students/DeptStudents?DName="+dept);
 
-          
+        function getDeptStudents(){
+            var dept = document.getElementById("dept").value;
+            dept=dept.replace(/ /g,"%20");
+            $("#StudentsTable").load("/Students/DeptStudents?DName="+dept);
         }
-        $(document).ready(function () {
-            $(".AddPopUp").click(function (e) {
-                $('#MyPopUp').modal('show');
-            });
-        });
+        function sendid(Id,name){
+            //Documents Clicked
+            stdname=name;
+            stdid = Id;
+            var dept = document.getElementById("dept").value;
+            dept=dept.replace(/ /g,"%20");
+            $("#StudentsTable").load("/Students/DeptStudents?DName="+dept+"&stdid="+stdid+"&stdname="+stdname,function(){$('#MyPopUp').modal('show')});
+        }
         function savedata(){
             var imgid=document.getElementById("imgid").checked
             var BD=document.getElementById("BD").checked
             var grad=document.getElementById("grad").checked
             var contract=document.getElementById("contract").checked
-            var policepaper=document.getElementById("policepaper").checked
-            var military=document.getElementById("military").checked
-            var note=$("#note").val() 
-            var dp=document.getElementById("dept").val()
-            window.location.href = '@Url.Action("Docs", "Students")?StudentId='+222+'&IdImg='+imgid+'&BirthDate='+BD+'&Military='+military+'&Graduation='+grad+'&Contract='contract++'&PolicePaper='+policepaper+'&Notes='+note+'&selectedDept='+dp;
+            var policepaper=document.getElementById("policepap").checked
+            var military=$("#military").val()
+            var note=$("#note").val()
+            var dp=$("#dept").val()
+            dp = dp.replace(/ /g,"%20");
+            $("#StudentsTable").load("/Students/Docs?StudentId="+stdid+"&IdImg="+imgid+"&BirthDate="+BD+"&Military="+military+"&Graduation="+grad+"&Contract="+contract+"&PolicePaper="+policepaper+"&Notes="+note+"&selectedDept="+dp);
         }
-        function sendid(Id){
-            stdid=Id;
-            
-        }
+        $("#dept").change(function(){
+            getDeptStudents();
+        })
 
 
     </script>
-    }
+}
 
 
 
