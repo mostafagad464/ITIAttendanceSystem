@@ -2,30 +2,41 @@
 
 @{
     ViewData["Title"] = "Create";
+    
 }
+<div>
+    <h3 style="text-align:center" >Add Students</h3>
+</div>
 
-<h1>Create</h1>
 
-<h4>Student</h4>
 <hr />
-<div class="row">
+
+<div class="row container"  >
+   
     <div class="col-md-4">
+
+         <h6 class="control-label form-control bg-info text-black" style="text-align:center">Add Student From Form</h6>
+
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="StudentStatus" class="control-label"></label>
+                <label asp-for="StudentName" class="control-label">Student Name</label>
+                <input asp-for="StudentName" class="form-control" />
+                <span asp-validation-for="StudentName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StudentStatus" class="control-label">Student Status</label>
                 <input asp-for="StudentStatus" class="form-control" />
                 <span asp-validation-for="StudentStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
+                <label asp-for="Id" class="control-label">ID</label>
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <select asp-for="DepartmentId" class ="form-control" asp-items="ViewBag.DepartmentId"></select>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
@@ -41,21 +52,13 @@
                 <input asp-for="University" class="form-control" />
                 <span asp-validation-for="University" class="text-danger"></span>
             </div>
+  
             <div class="form-group">
-                <label asp-for="Specialization" class="control-label"></label>
-                <input asp-for="Specialization" class="form-control" />
-                <span asp-validation-for="Specialization" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GraduationYear" class="control-label"></label>
+                <label asp-for="GraduationYear" class="control-label">Graduation Year</label>
                 <input asp-for="GraduationYear" class="form-control" />
                 <span asp-validation-for="GraduationYear" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="GraduationGrade" class="control-label"></label>
-                <input asp-for="GraduationGrade" class="form-control" />
-                <span asp-validation-for="GraduationGrade" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Mobile" class="control-label"></label>
                 <input asp-for="Mobile" class="form-control" />
@@ -66,26 +69,32 @@
                 <input asp-for="HomePhone" class="form-control" />
                 <span asp-validation-for="HomePhone" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="MilitaryStatusName" class="control-label"></label>
-                <input asp-for="MilitaryStatusName" class="form-control" />
-                <span asp-validation-for="MilitaryStatusName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
-            </div>
+
+            <br>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
+    <div class="col-md-8"  >
+    <h6 class="control-label form-control bg-info text-black" style="text-align:center">Add Students From Excel File</h6>
+    <form method="post" asp-controller="Students" asp-action="Import" enctype="multipart/form-data"> 
+        <div class="form-group">
+             <label asp-for="DepartmentId" class="control-label">Department</label>
+             <select asp-for="DepartmentId" class ="form-control" asp-items="ViewBag.DepartmentId"></select>
+        </div>
+        <br>
+        <input class="form-control" type="file" name="file"/>
+        <br>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+   
+   </div>
 </div>
-
+@*
 <div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <a asp-action="Index" >Back to List</a>
+</div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
