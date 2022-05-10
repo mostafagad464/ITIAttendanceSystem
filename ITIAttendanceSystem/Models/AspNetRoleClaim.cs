@@ -8,17 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index("DepartmentId", Name = "IX_Schedules_DepartmentId")]
-    public partial class Schedule
+    [Index("RoleId", Name = "IX_AspNetRoleClaims_RoleId")]
+    public partial class AspNetRoleClaim
     {
         [Key]
         public int Id { get; set; }
-        public int DepartmentId { get; set; }
-        public DateTime ScheduleDate { get; set; }
-        public int LectPeriod { get; set; }
+        [Required]
+        public string RoleId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
 
-        [ForeignKey("DepartmentId")]
-        [InverseProperty("Schedules")]
-        public virtual Department Department { get; set; }
+        [ForeignKey("RoleId")]
+        [InverseProperty("AspNetRoleClaims")]
+        public virtual AspNetRole Role { get; set; }
     }
 }

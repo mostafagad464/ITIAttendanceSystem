@@ -8,20 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index("StudentId", Name = "IX_Comments_StudentId")]
-    [Index("UserId", Name = "IX_Comments_UserId")]
-    public partial class Comment
+    [Index("UserId", Name = "IX_AspNetUserClaims_UserId")]
+    public partial class AspNetUserClaim
     {
         [Key]
         public int Id { get; set; }
-        public string Body { get; set; }
-        public int CommentType { get; set; }
-        public DateTime CommentDate { get; set; }
-        public int StudentId { get; set; }
+        [Required]
         public string UserId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
 
-        [ForeignKey("StudentId")]
-        [InverseProperty("Comments")]
-        public virtual Student Student { get; set; }
+        [ForeignKey("UserId")]
+        [InverseProperty("AspNetUserClaims")]
+        public virtual AspNetUser User { get; set; }
     }
 }

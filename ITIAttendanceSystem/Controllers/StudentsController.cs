@@ -113,6 +113,8 @@ namespace ITIAttendanceSystem.Views
                         student.HomePhone = worksheet.Cells[row, 12].Value.ToString().Trim();
                         student.MilitaryStatusName = worksheet.Cells[row, 13].Value.ToString().Trim();
                         student.Code = worksheet.Cells[row, 14].Value.ToString().Trim();
+                        student.StudentName = worksheet.Cells[row, 15].Value.ToString().Trim();
+                        student.SecNo = int.Parse(worksheet.Cells[row, 16].Value.ToString().Trim());
 
                         _context.Add(student);
                         await _context.SaveChangesAsync();

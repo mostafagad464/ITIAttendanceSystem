@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index(nameof(DepartmentId), Name = "IX_Students_DepartmentId")]
+    [Index("DepartmentId", Name = "IX_Students_DepartmentId")]
     public partial class Student
     {
         public Student()
@@ -33,17 +33,19 @@ namespace ITIAttendanceSystem.Models
         public string HomePhone { get; set; }
         public string MilitaryStatusName { get; set; }
         public string Code { get; set; }
+        public string StudentName { get; set; }
+        public int? SecNo { get; set; }
 
-        [ForeignKey(nameof(DepartmentId))]
+        [ForeignKey("DepartmentId")]
         [InverseProperty("Students")]
         public virtual Department Department { get; set; }
         [InverseProperty("Student")]
         public virtual Document Document { get; set; }
-        [InverseProperty(nameof(Attendance.Student))]
+        [InverseProperty("Student")]
         public virtual ICollection<Attendance> Attendances { get; set; }
-        [InverseProperty(nameof(Comment.Student))]
+        [InverseProperty("Student")]
         public virtual ICollection<Comment> Comments { get; set; }
-        [InverseProperty(nameof(studentPermission.Student))]
+        [InverseProperty("Student")]
         public virtual ICollection<studentPermission> studentPermissions { get; set; }
     }
 }

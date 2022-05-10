@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index(nameof(InstructorId), Name = "IX_studentPermissions_InstructorId")]
-    [Index(nameof(StudentId), Name = "IX_studentPermissions_StudentId")]
+    [Index("InstructorId", Name = "IX_studentPermissions_InstructorId")]
+    [Index("StudentId", Name = "IX_studentPermissions_StudentId")]
     public partial class studentPermission
     {
         [Key]
@@ -21,10 +21,10 @@ namespace ITIAttendanceSystem.Models
         public int PermissionType { get; set; }
         public int? InstructorId { get; set; }
 
-        [ForeignKey(nameof(InstructorId))]
+        [ForeignKey("InstructorId")]
         [InverseProperty("studentPermissions")]
         public virtual Instructor Instructor { get; set; }
-        [ForeignKey(nameof(StudentId))]
+        [ForeignKey("StudentId")]
         [InverseProperty("studentPermissions")]
         public virtual Student Student { get; set; }
     }
