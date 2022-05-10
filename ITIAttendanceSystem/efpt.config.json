@@ -86,7 +86,9 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "DESKTOP-B64B0HE.ITIAttendanceSystem",
+
+   "UiHint": "DESKTOP-GU2I92M.ITIAttendanceSystem",
+
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,

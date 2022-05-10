@@ -1,4 +1,4 @@
-﻿@model ITIAttendanceSystem.Models.Attendance
+﻿@model ITIAttendanceSystem.Models.Instructor
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,32 +8,31 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Attendance</h4>
+    <h4>Instructor</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ArrivalTime)
+            @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ArrivalTime)
+            @Html.DisplayFor(model => model.Id)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LeaveTime)
+            @Html.DisplayNameFor(model => model.InstName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LeaveTime)
+            @Html.DisplayFor(model => model.InstName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Student)
+            @Html.DisplayNameFor(model => model.Department)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Student.StudentId)
+            @Html.DisplayFor(model => model.Department.ShortName)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="StudentId" />
-        <input type="hidden" asp-for="AttendanceDate" />
+        <input type="hidden" asp-for="InstructorId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
