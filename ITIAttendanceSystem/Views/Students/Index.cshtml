@@ -1,107 +1,71 @@
-﻿@model IEnumerable<ITIAttendanceSystem.Models.Student>
+﻿@*@model IEnumerable<ITIAttendanceSystem.Models.Student>*@
+@model selectDepartmentViewModel
 
 @{
     ViewData["Title"] = "Index";
+    ViewData["stdid"] = 0;
 }
 
-<h1>Index</h1>
+<h1>Student List</h1>
+<form class="bg-light">
+    <label>Select Department</label>
+    <select id="dept" name="DeptId" asp-items="Model.DepartmentSelectList" class="col col-3">
+        <option>All Departments</option>
+    </select>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StudentStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Faculty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.University)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Specialization)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraduationYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GraduationGrade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mobile)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HomePhone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MilitaryStatusName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Faculty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.University)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Specialization)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraduationYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GraduationGrade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mobile)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HomePhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MilitaryStatusName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.ShortName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StudentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.StudentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.StudentId">Delete</a>
-            </td>
-        </tr>
+    @*<input type="submit" value="Filter" />*@
+
+    <a asp-action="Create" class="btn btn-primary offset-6">Add Student </a>
+</form>
+
+
+
+<div id="StudentsTable">
+</div>
+
+
+
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        var dept = document.getElementById("dept").value;
+        dept=dept.replace(/ /g,"%20");
+        $("#StudentsTable").load("/Students/DeptStudents?DName="+dept);
+
+        function getDeptStudents(){
+            var dept = document.getElementById("dept").value;
+            dept=dept.replace(/ /g,"%20");
+            $("#StudentsTable").load("/Students/DeptStudents?DName="+dept);
+        }
+        function sendid(Id,name){
+            //Documents Clicked
+            stdname=name;
+            stdid = Id;
+            var dept = document.getElementById("dept").value;
+            dept=dept.replace(/ /g,"%20");
+            $("#StudentsTable").load("/Students/DeptStudents?DName="+dept+"&stdid="+stdid,function(){$('#MyPopUp').modal('show')});
+        }
+        function savedata(){
+            var imgid=document.getElementById("imgid").checked
+            var BD=document.getElementById("BD").checked
+            var grad=document.getElementById("grad").checked
+            var contract=document.getElementById("contract").checked
+            var policepaper=document.getElementById("policepap").checked
+            var military=$("#military").val()
+            var note=$("#note").val()
+            var dp=$("#dept").val()
+            dp = dp.replace(/ /g,"%20");
+            $("#StudentsTable").load("/Students/Docs?StudentId="+stdid+"&IdImg="+imgid+"&BirthDate="+BD+"&Military="+military+"&Graduation="+grad+"&Contract="+contract+"&PolicePaper="+policepaper+"&Notes="+note+"&selectedDept="+dp);
+        }
+        $("#dept").change(function(){
+            getDeptStudents();
+        })
+
+
+    </script>
 }
-    </tbody>
-</table>
+
+
+
