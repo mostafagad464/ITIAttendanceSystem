@@ -45,7 +45,7 @@
             stdid = Id;
             var dept = document.getElementById("dept").value;
             dept=dept.replace(/ /g,"%20");
-            $("#StudentsTable").load("/Students/DeptStudents?DName="+dept+"&stdid="+stdid+"&stdname="+stdname,function(){$('#MyPopUp').modal('show')});
+            $("#StudentsTable").load("/Students/DeptStudents?DName="+dept+"&stdid="+stdid,function(){$('#MyPopUp').modal('show')});
         }
         function savedata(){
             var imgid=document.getElementById("imgid").checked

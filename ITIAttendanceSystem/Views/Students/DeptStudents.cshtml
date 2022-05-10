@@ -45,7 +45,7 @@
                     <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-success">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.StudentId" class="btn btn-danger">Delete</a>
-                    <a class="btn btn-secondary AddPopUp" id="btndocs" onclick="sendid(@item.StudentId,@item.StudentName)">Documents</a>
+                    <a class="btn btn-secondary AddPopUp" id="btndocs" onclick="sendid(@item.StudentId)">Documents</a>
                 </td>
             </tr>
         }

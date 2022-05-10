@@ -193,7 +193,7 @@ namespace ITIAttendanceSystem.Views
         {
             return RedirectToAction(nameof(Index), new { selectdept = selectedDept , StudentId = Stdid });
         }
-        public IActionResult DeptStudents(string DName, int? stdid,string stdname)
+        public IActionResult DeptStudents(string DName, int? stdid)
         {
             var vm = new selectDepartmentViewModel();
             List<Student> students = _context.Students.Include(s => s.Department).Include(s => s.Document).ToList();
@@ -202,8 +202,7 @@ namespace ITIAttendanceSystem.Views
             { vm.students = students.Where(a => a.Department != null && a.Department.ShortName == DName).ToList();}
             if (stdid != null)
                 vm.StdId = (int)stdid;
-            if (stdname != null)
-                vm.StdName = stdname;
+            
             return PartialView(vm);
         }
     }
