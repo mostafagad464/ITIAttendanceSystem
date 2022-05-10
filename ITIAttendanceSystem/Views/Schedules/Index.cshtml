@@ -1,47 +1,176 @@
 ﻿@model IEnumerable<ITIAttendanceSystem.Models.Schedule>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Schedule";
 }
 
-<h1>Index</h1>
+<div class="container-fluid text-center">
+    <h1 >Add or Update Schedule of Department</h1>    
+    <!--<form methode="get" asp-action="GetDeptSchedule" class="container-fluid alert-info">-->
+    <div class="container-fluid alert-info">
+        <br />
+        <div class="row">
+            <div class="col">
+                <label for="DepartmentId">Department</label>
+            </div>
+            <div class="col">
+                <label for="DateFrom">Date From</label>
+            </div>
+            <div class="col">
+                <label for="DateTo">Date To</label>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col">
+                <select id="DepartmentId" name="DepartmentId" class ="form-control" asp-items="ViewBag.DepartmentId">
+                    <!--<option>Select Department</option>-->
+                </select>
+            </div>
+            <div class="col">
+                <input id="DateFrom" name="DateFrom" type="date" class="form-control"  value="" >
+            </div>
+            <div class="col">
+                <input id="DateTo" name="DateTo" type="date" class="form-control" >
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <input id="subBtn" type="submit" class="form-control bg-success text-white" value="Show" aria-label="First name">
+            </div>
+        </div>
+        <br />
+    </div>
+    <!--</form>-->
+    <br />
+    
+    <br />
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ScheduleDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LectPeriod)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ScheduleDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LectPeriod)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.ShortName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+
+<div id="Schedule" class="container-fluid text-center">
+
+</div>
+
+@*
+<div  id="UpdateSchedule" style="visibility:hidden"  class="container-fluid text-center" >
+    <a class="btn btn-primary"  asp-action="update">Update</a>
+</div>
+*@
+
+@section Scripts{
+    
+    <script>
+        
+        window.onload = SetDate();
+       
+        function getSchedule()
+        {
+            var DepartmentId = $("#DepartmentId").val();
+            var DateFrom = $("#DateFrom").val();
+            var DateTo = $("#DateTo").val();
+            $("#Schedule").load("/Schedules/GetDeptSchedule?DepartmentId="+DepartmentId+"&DateFrom="+DateFrom+"&DateTo="+DateTo);
+        }
+
+        $("#subBtn").click(function(){
+            getSchedule();
+        })
+       
+        function SetDate() {
+            var today = changeDateFormat( new Date());
+            $("#DateFrom")[0].value=today;
+            $("#DateTo")[0].value=today;
+        }
+
+
+
+        // This Script for GetDeptSchedule.cshtml file.
+
+        var DateArr;
+        var PeriodArr;
+        
+        function SetScheduleValues(lectPeriod, date)
+        {         
+            //console.log(DateArr.length);
+            
+            if (!DateArr)
+            {
+                DateArr = new Array();
+                PeriodArr = new Array();
+            }
+            
+            var date2 = changeDateFormat(date);
+
+            DateArr.push(date2);
+            PeriodArr.push(lectPeriod);
+
+
+            console.log(DateArr.length);
+
+            console.log(lectPeriod);
+            console.log(date2);
+            console.log("Update Shedule Called");
+
+        }
+        
+        function UpdateSchedule()
+        {
+            var DepartmentId = $("#DepartmentId").val();
+            var DateFrom = $("#DateFrom").val();
+            var DateTo = $("#DateTo").val();
+
+            console.log("Update Shedule Called");
+
+            console.log(DateArr);
+            console.log(PeriodArr);
+
+            var datestring ="";
+            var lectstring ="";
+
+            for(var i=0;i<DateArr.length;i++)
+            {
+                if(i>0)
+                {
+                    datestring +="&";
+                }
+                datestring += "DateArr="+DateArr[i];
+            }
+
+            for(var j=0;j<PeriodArr.length;j++)
+            {
+                if(j>0)
+                {
+                    lectstring +="&";
+                }
+                lectstring += "PeriodArr="+PeriodArr[j];
+            }
+
+            //var url = "/Schedules/UpdateSchedule?DepartmentId="+DepartmentId+"&DateFrom="+DateFrom+"&DateTo="+DateTo+"&DateArr="+DateArr.toString()+"&PeriodArr="+PeriodArr.toString();
+            var url = "/Schedules/UpdateSchedule?DepartmentId="+DepartmentId+"&DateFrom="+DateFrom+"&DateTo="+DateTo+"&"+datestring+"&"+lectstring;
+
+            console.log(url);
+
+            //$("#Schedule").load("/Schedules/UpdateSchedule?DepartmentId="+DepartmentId+"&DateFrom="+DateFrom+"&DateTo="+DateTo+"&DateArr="+DateArr.toString()+"&PeriodArr="+PeriodArr.toString());
+            $("#Schedule").load("/Schedules/UpdateSchedule?DepartmentId="+DepartmentId+"&DateFrom="+DateFrom+"&DateTo="+DateTo+"&"+datestring+"&"+lectstring);
+
+            DateArr =new Array();
+            PeriodArr = new Array();
+            console.log("Updated");
+            console.log(DateArr);
+            console.log(PeriodArr);
+        }
+
+        function changeDateFormat(date)
+        {
+            var date2 = new Date(date);
+            var dd = String(date2.getDate()).padStart(2, '0');
+            var mm = String(date2.getMonth() + 1).padStart(2, '0');
+            var yyyy = date2.getFullYear();
+            date2 = yyyy + '-' + mm + '-' + dd;
+            return date2;
+        }
+    </script>
 }
-    </tbody>
-</table>
+

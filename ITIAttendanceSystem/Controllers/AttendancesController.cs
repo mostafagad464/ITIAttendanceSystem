@@ -21,138 +21,165 @@ namespace ITIAttendanceSystem.Views
         }
 
         // GET: Attendances
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var iTICOMPSYSDB2Context = _context.Attendances.Include(a => a.Student);
-            return View(await iTICOMPSYSDB2Context.ToListAsync());
+            ViewBag.Departments = new SelectList(_context.Departments, "Id", "ShortName");
+            return View();
         }
-
-        // GET: Attendances/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Attendances/IndexOnline
+        public IActionResult IndexOnline()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attendance = await _context.Attendances
-                .Include(a => a.Student)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
-            if (attendance == null)
-            {
-                return NotFound();
-            }
-
-            return View(attendance);
-        }
-
-        // GET: Attendances/Create
-        public IActionResult Create()
-        {
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId");
+            ViewBag.Departments = new SelectList(_context.Departments, "Id", "ShortName");
             return View();
         }
 
-        // POST: Attendances/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentId,AttendanceDate,ArrivalTime,LeaveTime")] Attendance attendance)
+        //Attendance: /Attendances/BarCode
+        //Leaving : /Attendances/BarCode?stat=L
+        public IActionResult BarCode(string? stat)
         {
-            if (ModelState.IsValid)
+            int att = 0;
+            if (stat == null)
             {
-                _context.Add(attendance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewBag.Header = "Atttendance Bar Code";
+                att = 1;
             }
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", attendance.StudentId);
-            return View(attendance);
+            else if(stat == "L")
+            {
+                ViewBag.Header = "Checkout Bar Code";
+            }
+            return View(att);
+        }
+        public IActionResult DepartmentStudents(int DepartmentID, string Status, DateTime? AttDate)
+        {
+            List<Student> studentsList = new List<Student>();
+
+            Department dept = _context.Departments.Include(s => s.Students).FirstOrDefault(x => x.Id == DepartmentID);
+            List<Student> StudentsInDept = dept.Students.ToList();
+
+            DateTime today = (AttDate == null) ? DateTime.Today : (DateTime)AttDate;
+            List<Attendance> Attended = _context.Attendances.Include(s => s.Student).Where(a => a.AttendanceDate == today && a.Student.DepartmentId == DepartmentID &&a.LeaveTime == null).ToList();
+            List<Student> StudentsAttended = new List<Student>();
+
+            foreach (Attendance attendance in Attended)
+            {
+                StudentsAttended.Add(attendance.Student);
+            }
+
+            List<Attendance> Left = _context.Attendances.Include(s => s.Student).Where(a => a.AttendanceDate == today && a.Student.DepartmentId == DepartmentID && a.LeaveTime != null).ToList();
+            List<Student> StudentsLeft = new List<Student>();
+
+            foreach (Attendance attendance in Left)
+            {
+                StudentsLeft.Add(attendance.Student);
+            }
+
+            List<Student> StudentsNotAttend = StudentsInDept.Except(StudentsAttended).ToList();
+            StudentsNotAttend = StudentsNotAttend.Except(StudentsLeft).ToList();
+
+            ViewBag.Status = Status;
+
+            if (Status == "Leaving")
+            {
+                studentsList = StudentsAttended;
+            }
+            else if (Status == "Arriving")
+            {
+                studentsList = StudentsNotAttend;
+            }
+            else if(Status == "Left")
+            {
+                studentsList = StudentsLeft;
+            }
+            return PartialView(studentsList);
+        }
+        public async Task<IActionResult> Attend(int id, string stat, int deptId, DateTime? AttDate, TimeSpan? AttTime)
+        {
+            Attendance StdAttend;
+
+            AttDate = (AttDate == null) ? DateTime.Today : AttDate;
+            AttTime = (AttTime == null) ? DateTime.Now.TimeOfDay : AttTime;
+
+            if (stat == "Arriving")
+            {
+                StdAttend = new Attendance();
+                StdAttend.StudentId = id;
+                StdAttend.AttendanceDate = (DateTime)AttDate;
+                StdAttend.ArrivalTime = AttTime;
+                _context.Add(StdAttend);
+                
+            }
+            else if (stat == "Leaving")
+            {
+                StdAttend = _context.Attendances.Where(a=>a.StudentId == id && a.AttendanceDate == (DateTime)AttDate).FirstOrDefault();
+
+                StdAttend.LeaveTime = AttTime;
+                _context.Update(StdAttend);
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(DepartmentStudents), new { DepartmentID = deptId, Status = stat });
         }
 
-        // GET: Attendances/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> BarCodeAttend(string BCode)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            Student std = _context.Students.FirstOrDefault(a => a.Code == BCode);
 
-            var attendance = await _context.Attendances.FindAsync(id);
-            if (attendance == null)
+            Attendance StdAttend;
+            
+            if (std != null)
             {
-                return NotFound();
-            }
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", attendance.StudentId);
-            return View(attendance);
-        }
-
-        // POST: Attendances/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,AttendanceDate,ArrivalTime,LeaveTime")] Attendance attendance)
-        {
-            if (id != attendance.StudentId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                StdAttend = _context.Attendances.Where(a => a.StudentId == std.StudentId && a.AttendanceDate == DateTime.Today).FirstOrDefault();
+                
+                if (StdAttend == null)
                 {
-                    _context.Update(attendance);
+                    StdAttend = new Attendance();
+                    StdAttend.StudentId = std.StudentId;
+                    StdAttend.AttendanceDate = DateTime.Today;
+                    StdAttend.ArrivalTime = DateTime.Now.TimeOfDay;
+                    _context.Add(StdAttend);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                //To view the students who already attended, we will set the status to "Leaving"
+                return RedirectToAction(nameof(DepartmentStudents), new { DepartmentID = std.DepartmentId, Status = "Leaving" });
+            }
+            else
+            {
+                return Content("Not found");
+            }
+        }
+
+        public async Task<IActionResult> BarCodeLeave(string BCode)
+        {
+            Student std = _context.Students.FirstOrDefault(a => a.Code == BCode);
+
+            Attendance StdAttend;
+
+            if (std != null)
+            {
+                StdAttend = _context.Attendances.Where(a => a.StudentId == std.StudentId && a.AttendanceDate == DateTime.Today && a.LeaveTime == null).FirstOrDefault();
+
+                if (StdAttend != null)
                 {
-                    if (!AttendanceExists(attendance.StudentId))
+                    StdAttend.LeaveTime = DateTime.Now.TimeOfDay;
+                    _context.Update(StdAttend);
+                    await _context.SaveChangesAsync();
+                }
+                else if(StdAttend ==null)
+                {
+                    StdAttend = _context.Attendances.Where(a => a.StudentId == std.StudentId && a.AttendanceDate == DateTime.Today && a.LeaveTime != null).FirstOrDefault();
+                    if (StdAttend == null)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        return Content("Didn't attend");
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //To view the students who already attended, we will set the status to "Leaving"
+                return RedirectToAction(nameof(DepartmentStudents), new { DepartmentID = std.DepartmentId, Status = "Left" });
             }
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", attendance.StudentId);
-            return View(attendance);
-        }
-
-        // GET: Attendances/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+            else
             {
-                return NotFound();
+                return Content("Not found");
             }
-
-            var attendance = await _context.Attendances
-                .Include(a => a.Student)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
-            if (attendance == null)
-            {
-                return NotFound();
-            }
-
-            return View(attendance);
         }
-
-        // POST: Attendances/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var attendance = await _context.Attendances.FindAsync(id);
-            _context.Attendances.Remove(attendance);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool AttendanceExists(int id)
         {
             return _context.Attendances.Any(e => e.StudentId == id);

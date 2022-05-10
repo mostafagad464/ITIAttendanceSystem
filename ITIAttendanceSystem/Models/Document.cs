@@ -20,7 +20,7 @@ namespace ITIAttendanceSystem.Models
         public bool PolicePaper { get; set; }
         public string Notes { get; set; }
 
-        [ForeignKey(nameof(StudentId))]
+        [ForeignKey("StudentId")]
         [InverseProperty("Document")]
         public virtual Student Student { get; set; }
     }

@@ -1,0 +1,74 @@
+﻿@model int
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1 class="text-center">@ViewBag.Header</h1>
+<div class="row">
+    <div class="col">
+        <div style="width:500px;" id="reader"></div>
+    </div>
+    <div class="col text-center">
+        <br />
+        <br />
+        <br />
+        <h4>OR Enter Code</h4>
+        <input id="result" type="text">
+        @if (Model == 1)
+        {
+            <input id="stat" type="text" value="" hidden>
+        }
+        else if (Model == 0)
+        {
+            <input id="stat" type="text" value="L" hidden>
+        }
+    </div>
+</div>
+<br />
+<div id="Students" class="text-center m-2">
+    
+</div>
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+        function getStudents(){
+            var BCode = $("#result").val();
+            var stat = $("#stat").val();
+            if(stat ==""){
+                $("#Students").load("/Attendances/BarCodeAttend?BCode="+BCode);
+            }
+            else if (stat == "L"){
+                $("#Students").load("/Attendances/BarCodeLeave?BCode="+BCode);
+            }
+            document.getElementById('result').value = "";
+        }
+        $("#result").keyup(function(event) {
+            if (event.keyCode === 13) {
+                getStudents();
+            }
+        });
+        function onScanSuccess(qrCodeMessage) {
+            document.getElementById('result').value = qrCodeMessage;
+            getStudents();
+            if(document.getElementById('stopScanning') !=null && getComputedStyle(document.getElementById('stopScanning')).display!="none"){
+                document.getElementById('stopScanning').click();
+            }
+            else{
+                html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader", { fps: 10, qrbox: 250 });
+                    html5QrcodeScanner.render(onScanSuccess, onScanError);
+            }
+        }
+        function onScanError(errorMessage) {
+          //handle scan error
+        }
+</script>
+}

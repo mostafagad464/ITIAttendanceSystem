@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITIAttendanceSystem.Models
 {
-    [Index(nameof(DepartmentId), Name = "IX_Schedules_DepartmentId")]
+    [Index("DepartmentId", Name = "IX_Schedules_DepartmentId")]
     public partial class Schedule
     {
         [Key]
@@ -17,7 +17,7 @@ namespace ITIAttendanceSystem.Models
         public DateTime ScheduleDate { get; set; }
         public int LectPeriod { get; set; }
 
-        [ForeignKey(nameof(DepartmentId))]
+        [ForeignKey("DepartmentId")]
         [InverseProperty("Schedules")]
         public virtual Department Department { get; set; }
     }

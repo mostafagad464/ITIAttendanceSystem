@@ -23,8 +23,68 @@ namespace ITIAttendanceSystem.Views
         // GET: Schedules
         public async Task<IActionResult> Index()
         {
-            var iTICOMPSYSDB2Context = _context.Schedules.Include(s => s.Department);
-            return View(await iTICOMPSYSDB2Context.ToListAsync());
+            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "ShortName");
+
+            //var iTICOMPSYSDB2Context = _context.Schedules.Include(s => s.Department);
+            //return View(await iTICOMPSYSDB2Context.ToListAsync());
+            return View();
+        }
+
+
+        public async Task<IActionResult> GetDeptSchedule(int DepartmentId, DateTime DateFrom, DateTime DateTo)
+        {
+            List<Schedule> model = new List<Schedule>();
+            //Department department = _context.Departments.FirstOrDefault(a => a.Id == DepartmentId);
+
+            model = _context.Schedules.Where(a => a.ScheduleDate >= DateFrom && a.ScheduleDate <= DateTo.AddDays(1)  && a.DepartmentId == DepartmentId).ToList();
+            
+            int totalDays = (int)(DateTo - DateFrom).TotalDays ;
+            DayOfWeek dayOfWeek = DateFrom.DayOfWeek;
+            int numDayOfWeek = (int) DateFrom.DayOfWeek + 1;
+            int daySchedule = totalDays + numDayOfWeek;
+            int constDaySchedule = daySchedule / 7;
+            if (daySchedule % 7 != 0)
+                constDaySchedule += 1;
+
+            ViewData["DateFrom"] = DateFrom;
+            ViewData["DateTo"] = DateTo;
+            ViewData["totalDays"] = totalDays;
+            ViewData["dayOfWeek"] = dayOfWeek;
+            ViewData["numDayOfWeek"] = numDayOfWeek;
+            ViewData["daySchedule"] = daySchedule;
+            ViewData["constDaySchedule"] = constDaySchedule;
+
+            return PartialView(model);
+        }
+
+        public async Task<IActionResult> UpdateSchedule(int DepartmentId, DateTime DateFrom, DateTime DateTo, DateTime[] DateArr, int[] PeriodArr)
+        {
+            for (int i = 0; i < PeriodArr.Length; i++)
+            {
+                Schedule schedule = _context.Schedules.FirstOrDefault(a => a.DepartmentId == DepartmentId && a.ScheduleDate == DateArr[i]);
+                if(schedule != null)
+                {
+                    if (PeriodArr[i] == 0)
+                        _context.Remove(schedule);
+                    else
+                    {
+                        schedule.LectPeriod = PeriodArr[i];
+                        _context.Update(schedule);
+                    }
+                    
+                }
+                else
+                {
+                    schedule = new Schedule();
+                    schedule.DepartmentId= DepartmentId;
+                    schedule.ScheduleDate = DateArr[i];
+                    schedule.LectPeriod = PeriodArr[i];
+                    _context.Add(schedule);
+                }
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("GetDeptSchedule",new { DepartmentId = DepartmentId, DateFrom = DateFrom, DateTo = DateTo});
         }
 
         // GET: Schedules/Details/5
@@ -157,5 +217,9 @@ namespace ITIAttendanceSystem.Views
         {
             return _context.Schedules.Any(e => e.Id == id);
         }
+
+
+
+
     }
 }

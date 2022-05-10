@@ -23,134 +23,69 @@ namespace ITIAttendanceSystem.Views
         // GET: buildingAffairsAttendances
         public async Task<IActionResult> Index()
         {
-            var iTICOMPSYSDB2Context = _context.buildingAffairsAttendances.Include(b => b.Staff);
-            return View(await iTICOMPSYSDB2Context.ToListAsync());
-        }
-
-        // GET: buildingAffairsAttendances/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var buildingAffairsAttendance = await _context.buildingAffairsAttendances
-                .Include(b => b.Staff)
-                .FirstOrDefaultAsync(m => m.StaffId == id);
-            if (buildingAffairsAttendance == null)
-            {
-                return NotFound();
-            }
-
-            return View(buildingAffairsAttendance);
-        }
-
-        // GET: buildingAffairsAttendances/Create
-        public IActionResult Create()
-        {
-            ViewData["StaffId"] = new SelectList(_context.BuildingAffairsStaffs, "Id", "FullNameAr");
             return View();
         }
-
-        // POST: buildingAffairsAttendances/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StaffId,AttendanceDate,ArrivalTime,LeaveTime")] buildingAffairsAttendance buildingAffairsAttendance)
+        public async Task<IActionResult> Staff(string Status)
         {
-            if (ModelState.IsValid)
+            List<BuildingAffairsStaff> StaffsList = new List<BuildingAffairsStaff>();
+
+            List<BuildingAffairsStaff> AllStaff = _context.BuildingAffairsStaffs.ToList();
+
+            DateTime today = DateTime.Today;
+            //Staff attended
+            List<buildingAffairsAttendance> Attended = _context.buildingAffairsAttendances.Include(s => s.Staff).Where(a => a.AttendanceDate == today && a.LeaveTime == null).ToList();
+            List<BuildingAffairsStaff> StaffsAttended = new List<BuildingAffairsStaff>();
+
+            foreach (buildingAffairsAttendance attendance in Attended)
             {
-                _context.Add(buildingAffairsAttendance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                StaffsAttended.Add(attendance.Staff);
             }
-            ViewData["StaffId"] = new SelectList(_context.BuildingAffairsStaffs, "Id", "FullNameAr", buildingAffairsAttendance.StaffId);
-            return View(buildingAffairsAttendance);
+
+            //Staff attended and left
+            List<buildingAffairsAttendance> Left = _context.buildingAffairsAttendances.Include(s => s.Staff).Where(a => a.AttendanceDate == today && a.LeaveTime != null).ToList();
+            List<BuildingAffairsStaff> StaffsLeft = new List<BuildingAffairsStaff>();
+
+            foreach (buildingAffairsAttendance attendance in Left)
+            {
+                StaffsLeft.Add(attendance.Staff);
+            }
+
+            List<BuildingAffairsStaff> StaffsNotAttend = AllStaff.Except(StaffsAttended).ToList();
+            StaffsNotAttend = StaffsNotAttend.Except(StaffsLeft).ToList();
+
+            ViewBag.Status = Status;
+            if (Status == "Arriving")
+            {
+                StaffsList = StaffsNotAttend;
+            }
+            else if (Status == "Leaving")
+            {
+                StaffsList = StaffsAttended;
+            }
+            return PartialView(StaffsList);
         }
-
-        // GET: buildingAffairsAttendances/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Attend(int id, string stat)
         {
-            if (id == null)
+            buildingAffairsAttendance StfAttend;
+
+            if (stat == "Arriving")
             {
-                return NotFound();
-            }
+                StfAttend = new buildingAffairsAttendance();
+                StfAttend.StaffId = id;
+                StfAttend.AttendanceDate = DateTime.Today;
+                StfAttend.ArrivalTime = DateTime.Now.TimeOfDay;
+                _context.Add(StfAttend);
 
-            var buildingAffairsAttendance = await _context.buildingAffairsAttendances.FindAsync(id);
-            if (buildingAffairsAttendance == null)
+            }
+            else if (stat == "Leaving")
             {
-                return NotFound();
+                StfAttend = _context.buildingAffairsAttendances.Where(a => a.StaffId == id && a.AttendanceDate == DateTime.Today).FirstOrDefault();
+
+                StfAttend.LeaveTime = DateTime.Now.TimeOfDay;
+                _context.Update(StfAttend);
             }
-            ViewData["StaffId"] = new SelectList(_context.BuildingAffairsStaffs, "Id", "FullNameAr", buildingAffairsAttendance.StaffId);
-            return View(buildingAffairsAttendance);
-        }
-
-        // POST: buildingAffairsAttendances/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StaffId,AttendanceDate,ArrivalTime,LeaveTime")] buildingAffairsAttendance buildingAffairsAttendance)
-        {
-            if (id != buildingAffairsAttendance.StaffId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(buildingAffairsAttendance);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!buildingAffairsAttendanceExists(buildingAffairsAttendance.StaffId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["StaffId"] = new SelectList(_context.BuildingAffairsStaffs, "Id", "FullNameAr", buildingAffairsAttendance.StaffId);
-            return View(buildingAffairsAttendance);
-        }
-
-        // GET: buildingAffairsAttendances/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var buildingAffairsAttendance = await _context.buildingAffairsAttendances
-                .Include(b => b.Staff)
-                .FirstOrDefaultAsync(m => m.StaffId == id);
-            if (buildingAffairsAttendance == null)
-            {
-                return NotFound();
-            }
-
-            return View(buildingAffairsAttendance);
-        }
-
-        // POST: buildingAffairsAttendances/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var buildingAffairsAttendance = await _context.buildingAffairsAttendances.FindAsync(id);
-            _context.buildingAffairsAttendances.Remove(buildingAffairsAttendance);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Staff), new { Status = stat });
         }
 
         private bool buildingAffairsAttendanceExists(int id)

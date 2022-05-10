@@ -60,7 +60,8 @@ namespace ITIAttendanceSystem.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StudentId,PermissionDate,Note,PermissionState,PermissionType,InstructorId")] studentPermission studentPermission)
+        //public async Task<IActionResult> Create([Bind("Id,StudentId,PermissionDate,Note,PermissionState,PermissionType,InstructorId")] studentPermission studentPermission)
+        public async Task<IActionResult> Create([Bind("Id,StudentId,PermissionDate,Note,InstructorId")] studentPermission studentPermission)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +97,8 @@ namespace ITIAttendanceSystem.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,PermissionDate,Note,PermissionState,PermissionType,InstructorId")] studentPermission studentPermission)
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,PermissionDate,Note,PermissionState,PermissionType,InstructorId")] studentPermission studentPermission)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,PermissionDate,Note,InstructorId")] studentPermission studentPermission)
         {
             if (id != studentPermission.Id)
             {
