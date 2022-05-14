@@ -64,8 +64,14 @@ namespace ITIAttendanceSystem.Views
                 Schedule schedule = _context.Schedules.FirstOrDefault(a => a.DepartmentId == DepartmentId && a.ScheduleDate == DateArr[i]);
                 if(schedule != null)
                 {
-                    schedule.LectPeriod = PeriodArr[i];
-                    _context.Update(schedule);
+                    if (PeriodArr[i] == 0)
+                        _context.Remove(schedule);
+                    else
+                    {
+                        schedule.LectPeriod = PeriodArr[i];
+                        _context.Update(schedule);
+                    }
+                    
                 }
                 else
                 {

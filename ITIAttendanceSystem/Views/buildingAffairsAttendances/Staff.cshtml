@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<BuildingAffairsStaff>
+@{
+
+}
+<div class="row">
+    <div class="col-4 p-2">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Security</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.DeptName == "Security")
+                    {
+                        <tr>
+                            <td>
+                                <a onclick="updateStaff(@item.Id)" class="btn shadow-none w-100">@item.FullNameEn</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4 p-2">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Cleaning</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.DeptName == "Cleaning")
+                    {
+                        <tr>
+                            <td>
+                                <a onclick="updateStaff(@item.Id)" class="btn shadow-none w-100">@item.FullNameEn</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4 p-2">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Maintenance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.DeptName == "Maintenance")
+                    {
+                        <tr>
+                            <td>
+                                <a onclick="updateStaff(@item.Id)" class="btn shadow-none w-100">@item.FullNameEn</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

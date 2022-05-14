@@ -83,6 +83,9 @@ namespace ITIAttendanceSystem.Migrations
                     b.Property<int>("BuildingAffairsType")
                         .HasColumnType("int");
 
+                    b.Property<string>("DeptName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullNameAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -307,7 +310,13 @@ namespace ITIAttendanceSystem.Migrations
                     b.Property<string>("Mobile")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SecNo")
+                        .HasColumnType("int");
+
                     b.Property<string>("Specialization")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StudentStatus")
