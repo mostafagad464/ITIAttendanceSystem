@@ -37,11 +37,35 @@ namespace ITIAttendanceSystem.Views
 
         }
         // GET: Students/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id , int warning =0)
         {
+            
             if (id == null)
             {
                 return NotFound();
+            }
+            if (warning == 1 || warning ==2 || warning==3)
+            {
+                Comment c = new Comment();
+                if(warning == 1)
+                    c.Body = "First Wearning";
+                else if(warning == 2)
+                    c.Body = "Second Wearning";
+                else
+                    c.Body = "separation";
+                c.StudentId = (int)id;
+                c.CommentType = warning;
+                c.CommentDate = DateTime.Now;
+                _context.Comments.Add(c);
+                _context.SaveChanges();
+            }
+
+            var comments = _context.Comments.ToList();
+            List<Comment> commentret = new List<Comment>();
+            foreach(Comment comment in comments)
+            {
+                if (comment.StudentId == id)
+                    commentret.Add(comment);
             }
 
             var student = await _context.Students
@@ -51,7 +75,7 @@ namespace ITIAttendanceSystem.Views
             {
                 return NotFound();
             }
-
+            ViewBag.comment = commentret;
             return View(student);
         }
 
