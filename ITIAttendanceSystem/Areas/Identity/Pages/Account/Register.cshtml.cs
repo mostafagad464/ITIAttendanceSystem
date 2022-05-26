@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ITIAttendanceSystem.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles = "Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -143,7 +144,6 @@ namespace ITIAttendanceSystem.Areas.Identity.Pages.Account
                     //}
                     //else
                     //{
-                        await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     ////}
                 }

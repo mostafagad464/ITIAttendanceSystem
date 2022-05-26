@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITIAttendanceSystem.Controllers
 {
+    [Authorize(Roles = "StdAffairs")]
     public class DocumentController : Controller
 
     {

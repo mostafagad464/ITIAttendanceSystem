@@ -47,6 +47,9 @@
             dept=dept.replace(/ /g,"%20");
             $("#StudentsTable").load("/Students/DeptStudents?DName="+dept+"&stdid="+stdid,function(){$('#MyPopUp').modal('show')});
         }
+        function pager(p){
+        $("#StudentsTable").load("/Students/DeptStudents?DName="+dept+"&pg="+p);}
+
         function savedata(){
             var imgid=document.getElementById("imgid").checked
             var BD=document.getElementById("BD").checked
