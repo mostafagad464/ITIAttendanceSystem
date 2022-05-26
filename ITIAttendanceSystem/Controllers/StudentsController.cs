@@ -292,13 +292,33 @@ namespace ITIAttendanceSystem.Views
         {
             return RedirectToAction(nameof(Index), new { selectdept = selectedDept , StudentId = Stdid });
         }
-        public IActionResult DeptStudents(string DName, int? stdid)
+        public IActionResult DeptStudents(string DName, int? stdid, int pg = 1)
         {
             var vm = new selectDepartmentViewModel();
+            const int pageSize = 7;
+            if (pg < 1)
+            {
+                pg = 1;
+            }
             List<Student> students = _context.Students.Include(s => s.Department).Include(s => s.Document).ToList();
-            if (DName == "All Departments") { vm.students = students; }
+            if (DName == "All Departments")
+            {
+                int recsCount = students.Count();
+                var pager = new paging(recsCount, pg, pageSize);
+                int recskip = (pg - 1) * pageSize;
+                vm.students = students.Skip(recskip).Take(pager.PageSize).ToList();
+                this.ViewBag.Pager = pager;
+            }
             else
-            { vm.students = students.Where(a => a.Department != null && a.Department.ShortName == DName).ToList();}
+            {
+                var stds = students.Where(a => a.Department != null && a.Department.ShortName == DName).ToList();
+                int recsCount = stds.Count();
+                var pager = new paging(recsCount, pg, pageSize);
+                int recskip = (pg - 1) * pageSize;
+
+                vm.students = stds.Skip(recskip).Take(pager.PageSize).ToList();
+                this.ViewBag.Pager = pager;
+            }
             if (stdid != null)
                 vm.StdId = (int)stdid;
             

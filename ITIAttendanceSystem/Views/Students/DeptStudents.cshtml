@@ -3,6 +3,16 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    ViewData["Title"] = "Index";
+    ViewData["stdid"] = 0;
+    paging Page = new paging();
+    int pageNo = 0;
+    if(ViewBag.Pager!=null)
+    {
+        Page = ViewBag.Pager;
+        pageNo = Page.CurrentPage;
+    }
+
 }
 <table class="table">
     <thead>
@@ -51,6 +61,25 @@
         }
     </tbody>
 </table>
+<div class="container">
+    @if (Page.TotalPages > 0)
+    {
+
+        <ul class="pagination justify-content-end">
+            @for (var p = Page.StartPage; p <= Page.EndPage; p++)
+            {
+                <li class="page-item @(p==Page.CurrentPage ? "active" : "")">
+                    <a id="pg" class="page-link" onclick=pager(@p)>@p</a>
+                    
+
+                </li>
+            }
+
+        </ul>
+    }
+   
+
+</div>
 @{
     Html.RenderPartial("_docpartialview");
 }
