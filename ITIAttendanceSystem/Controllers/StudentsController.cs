@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using ITIAttendanceSystem.Data;
 using ITIAttendanceSystem.Models;
 using OfficeOpenXml;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITIAttendanceSystem.Views
 {
+    [Authorize(Roles = "StdAffairs")]
     public class StudentsController : Controller
     {
         private readonly ITICOMPSYSDB2Context _context;
