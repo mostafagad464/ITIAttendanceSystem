@@ -11,22 +11,58 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ITIAttendanceSystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <nav b-m0ro3slwwo="" class="navbar navbar-expand-lg  navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3">
+            <div b-m0ro3slwwo="" class="container-fluid">
+                <a class="navbar-brand" href="/">ITI Attendance System</a>
+                <button b-m0ro3slwwo="" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span b-m0ro3slwwo="" class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div b-m0ro3slwwo="" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul b-m0ro3slwwo="" class="navbar-nav flex-grow-1">
+                        <li b-m0ro3slwwo="" class="nav-item">
+                            <a class="nav-link text-dark" href="/Schedules">Schedules</a>
                         </li>
-                        
+                        <li b-m0ro3slwwo="" class="nav-item">
+                            <a class="nav-link text-dark" href="/Students">Students</a>
+                        </li>
+                        <li b-m0ro3slwwo="" class="nav-item">
+                            <a class="nav-link text-dark" href="/studentPermissions">Student Permission</a>
+                        </li>
+                        <li b-m0ro3slwwo="" class="nav-item dropdown">
+                            <a b-m0ro3slwwo="" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Students Attendance
+                            </a>
+                            <ul b-m0ro3slwwo="" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li b-m0ro3slwwo="">
+                                    <a class="dropdown-item" href="/Attendances">Attendance</a>
+                                </li>
+                                <li b-m0ro3slwwo="">
+                                    <a class="dropdown-item" href="/Attendances/IndexOnline">Online Attendance</a>
+                                </li>
+                                <li b-m0ro3slwwo="">
+                                    <a class="dropdown-item" href="/Attendances/BarCode">Attendance BarCode</a>
+                                </li>
+                                <li b-m0ro3slwwo="">
+                                    <a class="dropdown-item" href="/Attendances/BarCode?stat=L">Check Out Bar Code</a>
+                                </li>
+                            </ul>
+                        </li>                        
+                        <li b-m0ro3slwwo="" class="nav-item">
+                            <a class="nav-link text-dark" href="/buildingAffairsAttendances">Staff Attendance</a>
+                        </li>
                     </ul>
                 </div>
-                <partial name="_LoginPartial" />
+                
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" id="register" href="/Identity/Account/Register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" id="login" href="/Identity/Account/Login">Login</a>
+                    </li>
+                </ul>
+
             </div>
         </nav>
     </header>
