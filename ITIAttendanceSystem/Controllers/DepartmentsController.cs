@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ITIAttendanceSystem.Data;
 using ITIAttendanceSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITIAttendanceSystem.Views
 {
+    [Authorize(Roles = "StdAffairs")]
     public class DepartmentsController : Controller
     {
         private readonly ITICOMPSYSDB2Context _context;

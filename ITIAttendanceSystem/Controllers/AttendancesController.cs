@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ITIAttendanceSystem.Data;
 using ITIAttendanceSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ITIAttendanceSystem.Views
 {
+    
     public class AttendancesController : Controller
     {
         private readonly ITICOMPSYSDB2Context _context;
@@ -21,12 +23,14 @@ namespace ITIAttendanceSystem.Views
         }
 
         // GET: Attendances
+        [Authorize(Roles = "Security")]
         public IActionResult Index()
         {
             ViewBag.Departments = new SelectList(_context.Departments, "Id", "ShortName");
             return View();
         }
         // GET: Attendances/IndexOnline
+        [Authorize(Roles = "StdAffairs")]
         public IActionResult IndexOnline()
         {
             ViewBag.Departments = new SelectList(_context.Departments, "Id", "ShortName");
@@ -35,6 +39,7 @@ namespace ITIAttendanceSystem.Views
 
         //Attendance: /Attendances/BarCode
         //Leaving : /Attendances/BarCode?stat=L
+        [Authorize(Roles = "Security")] 
         public IActionResult BarCode(string? stat)
         {
             int att = 0;
@@ -49,6 +54,8 @@ namespace ITIAttendanceSystem.Views
             }
             return View(att);
         }
+
+        [Authorize(Roles = "StdAffairs,Security")]
         public IActionResult DepartmentStudents(int DepartmentID, string Status, DateTime? AttDate)
         {
             List<Student> studentsList = new List<Student>();
@@ -92,6 +99,8 @@ namespace ITIAttendanceSystem.Views
             }
             return PartialView(studentsList);
         }
+        
+        [Authorize(Roles = "StdAffairs,Security")]
         public async Task<IActionResult> Attend(int id, string stat, int deptId, DateTime? AttDate, TimeSpan? AttTime)
         {
             Attendance StdAttend;
@@ -119,6 +128,7 @@ namespace ITIAttendanceSystem.Views
             return RedirectToAction(nameof(DepartmentStudents), new { DepartmentID = deptId, Status = stat });
         }
 
+        [Authorize(Roles = "Security")]
         public async Task<IActionResult> BarCodeAttend(string BCode)
         {
             Student std = _context.Students.FirstOrDefault(a => a.Code == BCode);
@@ -148,6 +158,7 @@ namespace ITIAttendanceSystem.Views
             }
         }
 
+        [Authorize(Roles = "Security")]
         public async Task<IActionResult> BarCodeLeave(string BCode)
         {
             Student std = _context.Students.FirstOrDefault(a => a.Code == BCode);
