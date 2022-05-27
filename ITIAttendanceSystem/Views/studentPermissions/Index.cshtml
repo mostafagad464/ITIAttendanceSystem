@@ -1,65 +1,72 @@
-﻿@model IEnumerable<ITIAttendanceSystem.Models.studentPermission>
+﻿@model StudentPermissionModelView
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Student Permission</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PermissionDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Note)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.PermissionState)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PermissionType)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Instructor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PermissionDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Note)
-            </td>
-           @* <td>
-                @Html.DisplayFor(modelItem => item.PermissionState)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PermissionType)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructor.InstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.StudentName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+<form class="bg-light">
+
+    <label  class="col">Student Name</label>
+
+    <input  class="col" asp-action="Index" asp-for="SearchText" value="@Model.SearchText" id="inputSearch">
+    <label class="col">Search By Date </label>
+
+    <input class="col" id="dateSearch"  type="date" class="form-control" value="">
+
+
+ </form>
+
+
+</select>
+
+
+
+<div id="PermissionTable">
+</div>
+
+@section Scripts{
+<script type="text/javascript">
+    window.onload = LoadTable();
+   
+     $("#dateSearch").change(function(){
+         var selectedDate = document.getElementById("dateSearch").value;
+           
+            var Day = changeDateFormat(selectedDate);
+            console.log(Day);
+
+            $("#PermissionTable").load("/studentPermissions/PermissionTablePartialView?SelectedDate="+Day);
+     });
+    //
+    //search by name functon
+        $("#inputSearch").keyup(function(){
+       var s =$("#inputSearch").val();
+        $("#PermissionTable").load("/studentPermissions/PermissionTablePartialView?SearchText="+s);
+        });
+        //-----
+         function geDateStd(){
+            
+        }
+
+      //load all permissions
+     function LoadTable(){
+        $("#PermissionTable").load("/studentPermissions/PermissionTablePartialView");
+     }
+     //change Format Function
+       function changeDateFormat(date)
+        {
+            var date2 = new Date(date);
+            var dd = String(date2.getDate()).padStart(2, '0');
+            var mm = String(date2.getMonth() + 1).padStart(2, '0');
+            var yyyy = date2.getFullYear();
+            date2 = yyyy + '-' + mm + '-' + dd;
+            console.log(date2);
+            return date2;
+        }
+</script>
 }
-    </tbody>
-</table>

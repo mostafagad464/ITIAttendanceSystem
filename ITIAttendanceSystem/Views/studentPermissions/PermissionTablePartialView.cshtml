@@ -1,0 +1,48 @@
+﻿@model StudentPermissionModelView
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+    
+<table class="table">
+    <thead>
+        <tr >
+               
+                <th>Permission Date</th>
+                <th>Note</th>
+                <th>Instructor Name</th>
+                <th>Student Name</th>
+                <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.list)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PermissionDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Instructor.InstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.StudentName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+
+                </td>
+    
+               
+            </tr>
+        }
+    </tbody>
+</table>

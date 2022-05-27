@@ -23,11 +23,76 @@ namespace ITIAttendanceSystem.Views
         }
 
         // GET: studentPermissions
+        StudentPermissionModelView model = new StudentPermissionModelView();
+
         public async Task<IActionResult> Index()
         {
-            var iTICOMPSYSDB2Context = _context.studentPermissions.Include(s => s.Instructor).Include(s => s.Student);
-            return View(await iTICOMPSYSDB2Context.ToListAsync());
+            return View(model);
+
+
+
+
+
+
         }
+
+        public async Task<IActionResult> PermissionTablePartialView(string SearchText, DateTime SelectedDate)
+        {
+            //Load All Students
+            if (string.IsNullOrEmpty(SearchText) && SelectedDate == DateTime.MinValue)
+            {
+                model.list = _context.studentPermissions.Include(s => s.Instructor).Include(s => s.Student);
+
+                // return PartialView(model);
+            }
+
+            else if (string.IsNullOrEmpty(SearchText) && SelectedDate != DateTime.MinValue)
+            {
+                List<ITIAttendanceSystem.Models.studentPermission> NewList = new List<ITIAttendanceSystem.Models.studentPermission>();
+
+
+                model.list = _context.studentPermissions.Include(s => s.Instructor).Include(s => s.Student);
+                foreach (var item in model.list)
+                {
+                    if (item.PermissionDate.Day == SelectedDate.Day)
+                    {
+                        NewList.Add(item);
+                    }
+                    //if (item.Student.StudentName.Contains(SearchText))
+                    //{
+                    //    NewList.Add(item);
+                    //}
+
+
+                }
+                model.list = NewList;
+                //   return PartialView(model);
+            }
+
+            else if (SearchText!=String.Empty && SelectedDate == DateTime.MinValue)
+            {
+                List<ITIAttendanceSystem.Models.studentPermission> NewList = new List<ITIAttendanceSystem.Models.studentPermission>();
+
+
+                model.list = _context.studentPermissions.Include(s => s.Instructor).Include(s => s.Student);
+                foreach (var item in model.list)
+                {
+
+                    if (item.Student.StudentName.Contains(SearchText))
+                    {
+                        NewList.Add(item);
+                    }
+
+
+                }
+                model.list = NewList;
+                //   return PartialView(model);
+            }
+          
+            return PartialView(model);
+
+        }
+        //  model.SearchText = SearchText;
 
         // GET: studentPermissions/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -52,8 +117,8 @@ namespace ITIAttendanceSystem.Views
         // GET: studentPermissions/Create
         public IActionResult Create()
         {
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "InstructorId", "InstructorId");
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId");
+            ViewData["InstructorId"] = new SelectList(_context.Instructors, "InstructorId", "InstName");
+            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentName");
             return View();
         }
 
@@ -89,8 +154,8 @@ namespace ITIAttendanceSystem.Views
             {
                 return NotFound();
             }
-            ViewData["InstructorId"] = new SelectList(_context.Instructors, "InstructorId", "InstructorId", studentPermission.InstructorId);
-            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", studentPermission.StudentId);
+            ViewData["InstructorId"] = new SelectList(_context.Instructors, "InstructorId", "InstName");
+            ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentName");
             return View(studentPermission);
         }
 
